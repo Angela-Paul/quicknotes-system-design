@@ -48,6 +48,27 @@ async function getNotes() {
   return result.data;
 }
 
+// ---------- POST: create a note ----------
+async function createNote(title, body) {
+  return request(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title: title, body: body, userId: 1 }),
+  });
+}
+
+// ---------- Validation ----------
+// Returns an error message, or "" if the title is fine
+function validateTitle(title) {
+  if (title === "") {
+    return "A title is required.";
+  }
+  if (title.length > 100) {
+    return "The title must be 100 characters or fewer.";
+  }
+  return "";
+}
+
 // ---------- Drawing the list ----------
 function createNoteItem(note) {
   const item = document.createElement("li");
@@ -103,3 +124,46 @@ async function loadNotes() {
 }
 
 loadBtn.addEventListener("click", loadNotes);
+
+// ---------- Create button (the form) ----------
+// Puts one new note at the top of the list
+function addNoteToTop(note) {
+  const emptyMessage = notesList.querySelector(".empty-message");
+  if (emptyMessage) {
+    emptyMessage.remove();
+  }
+  notesList.prepend(createNoteItem(note));
+}
+
+async function handleSubmit(event) {
+  event.preventDefault(); // stop the page from reloading
+
+  const title = titleInput.value.trim();
+  const body = bodyInput.value.trim();
+
+  const problem = validateTitle(title);
+  if (problem !== "") {
+    setStatus(problem, "error");
+    return; // stop here, no request is sent
+  }
+
+  setStatus("Creating note...", "loading");
+  setBusy(true);
+
+  try {
+    const result = await createNote(title, body);
+    addNoteToTop(result.data);
+    setStatus(
+      "Note created (status " + result.status + ", id " + result.data.id + ").",
+      "success"
+    );
+    noteForm.reset();
+  } catch (error) {
+    setStatus("Could not create the note. Please try again.", "error");
+    console.error("Create failed:", error.message);
+  } finally {
+    setBusy(false);
+  }
+}
+
+noteForm.addEventListener("submit", handleSubmit);
