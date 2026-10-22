@@ -1,0 +1,141 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f2f4f7;
+  color: #222222;
+}
+
+header {
+  background-color: #2a4d69;
+  color: #ffffff;
+  text-align: center;
+  padding: 24px 16px;
+}
+
+header h1 {
+  margin: 0 0 8px;
+}
+
+header p {
+  margin: 0;
+}
+
+main {
+  max-width: 700px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+section {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin: 12px 0 6px;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  border: 1px solid #bbbbbb;
+  border-radius: 6px;
+}
+
+button {
+  padding: 10px 16px;
+  font-size: 1rem;
+  background-color: #2a4d69;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1b3347;
+}
+
+button:disabled {
+  background-color: #999999;
+  cursor: not-allowed;
+}
+
+form button {
+  margin-top: 12px;
+}
+
+#status {
+  margin: 12px 0;
+}
+
+.status-loading {
+  color: #555555;
+}
+
+.status-success {
+  color: #1b6e2d;
+  background-color: #e6f4ea;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.status-error {
+  color: #b00020;
+  background-color: #fdecea;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+#notes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.note-card {
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border: 1px solid #dddddd;
+  border-left: 6px solid #2a4d69;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.note-title {
+  margin: 0 0 6px;
+}
+
+.note-body {
+  margin: 0 0 8px;
+}
+
+.delete-btn {
+  padding: 6px 12px;
+  background-color: #b00020;
+}
+
+.delete-btn:hover {
+  background-color: #7f0016;
+}
+
+.empty-message {
+  color: #666666;
+  font-style: italic;
+}
