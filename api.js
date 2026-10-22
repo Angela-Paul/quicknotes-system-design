@@ -57,6 +57,19 @@ async function createNote(title, body) {
   });
 }
 
+// ---------- DELETE: remove a note ----------
+// NOTE ABOUT THE FAKE API: JSONPlaceholder is a practice server. It answers
+// DELETE requests as if they worked (status 200), but it never really stores
+// or removes anything. So a note we created earlier only exists on this page,
+// and a deleted note will come back after "Load notes", because the server
+// still has it. My approach: when the server replies OK, I remove that note's
+// card from the page myself. I remove the exact card that was clicked, not
+// "the note with this id", because every note we create gets the same fake id
+// (101), so ids cannot be used to tell new notes apart.
+async function deleteNote(id) {
+  return request(API_URL + "/" + id, { method: "DELETE" });
+}
+
 // ---------- Validation ----------
 // Returns an error message, or "" if the title is fine
 function validateTitle(title) {
@@ -82,8 +95,14 @@ function createNoteItem(note) {
   body.classList.add("note-body");
   body.textContent = note.body;
 
-  item.append(title, body);
-  return item;
+   const deleteBtn = document.createElement("button");
+  deleteBtn.type = "button";
+  deleteBtn.classList.add("delete-btn");
+  deleteBtn.dataset.id = note.id;
+  deleteBtn.textContent = "Delete";
+
+  item.append(title, body, deleteBtn);
+  return item; 
 }
 
 function showEmptyMessage() {
@@ -167,3 +186,34 @@ async function handleSubmit(event) {
 }
 
 noteForm.addEventListener("submit", handleSubmit);
+
+// ---------- Delete button (one listener for the whole list) ----------
+async function handleListClick(event) {
+  if (!event.target.classList.contains("delete-btn")) {
+    return; // the click was not on a Delete button
+  }
+
+  const card = event.target.closest(".note-card");
+  const id = event.target.dataset.id;
+
+  setStatus("Deleting note...", "loading");
+  setBusy(true);
+
+  try {
+    const result = await deleteNote(id);
+    card.remove();
+
+    if (!notesList.querySelector(".note-card")) {
+      showEmptyMessage();
+    }
+
+    setStatus("Note deleted (status " + result.status + ").", "success");
+  } catch (error) {
+    setStatus("Could not delete the note. Please try again.", "error");
+    console.error("Delete failed:", error.message);
+  } finally {
+    setBusy(false);
+  }
+}
+
+notesList.addEventListener("click", handleListClick);
